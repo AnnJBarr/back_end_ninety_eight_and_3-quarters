@@ -29,15 +29,24 @@ app.get("/tasks", function(req, response) {
 
 app.delete("/tasks/:taskID", function (request, response){
 // Delete task with given ID from the database
-const taskToBeDeletedID = request.params.taskID;
-let deleteResponse = {message: "You issued a delete request for ID: " + taskToBeDeletedID}
-
-if(taskToBeDeletedID > 4){
-  response.status(404)
-  deleteResponse = {message: "Task: " + taskToBeDeletedID + " does not exist"}
-}
-response.send(deleteResponse);
+const taskID = request.params.taskID;
+//Escape user provided values
+connection.query("DELETE from task WHERE task_id = ?", [taskID], function (err, data) {
+ if(err) {
+   response.status(500).json({error: err});
+ } else {
+   response.sendStatus(200)
+ }
 });
+});
+// let deleteResponse = {message: "You issued a delete request for ID: " + taskToBeDeletedID}
+
+// if(taskToBeDeletedID > 4){
+//   response.status(404)
+//   deleteResponse = {message: "Task: " + taskToBeDeletedID + " does not exist"}
+// }
+// response.send(deleteResponse);
+// });
 
 app.post("/tasks", function (request, response){
   //Create the new task in the database
