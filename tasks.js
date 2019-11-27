@@ -13,21 +13,18 @@ app.get("/tasks", function(req, response) {
   {"text" : "do dishes", "completed" : false, "date" : "2019-10-29", id : 2}, {"text" : "buy oats", "completed" : false, "date" : "2019-10-29", id : 3}, 
   {"text" : "buy cat food", "completed" : false, "date" : "2019-10-07", "id" : 4}] });
 });
-// app.get("/tasks", function (request, response) {
-// Get all tasks from database
-// response.status(200).send("You requested all the tasks!");
-// });
 
 app.delete("/tasks/:taskID", function (request, response){
 // Delete task with given ID from the database
-const taskID = request.params.taskID;
-let deleteResponse = {message: "You issued a delete request for ID: " + taskID}
-response.status(200).send(deleteResponse);
+const taskToBeDeletedID = request.params.taskID;
+let deleteResponse = {message: "You issued a delete request for ID: " + taskToBeDeletedID}
+
+if(taskToBeDeletedID > 4){
+  response.status(404)
+  deleteResponse = {message: "Task: " + taskToBeDeletedID + " does not exist"}
+}
+response.send(deleteResponse);
 });
-// if(taskID > 4){
-//   response.status(404)
-//   deleteResponse = {message: "Task: " + taskToBeDeletedID + " does not exist"}
-// }
 
 app.post("/tasks", function (request, response){
   //Create the new task in the database
@@ -48,4 +45,4 @@ app.put("/tasks/:taskID", function(request, response){
 
 });
 
-module.exports.tasks = serverlessHttp(app);
+module.exports.handler = serverlessHttp(app);
