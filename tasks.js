@@ -2,6 +2,14 @@ const express = require("express");
 const serverlessHttp = require("serverless-http");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const mysql = require("mysql");
+
+var connection = mysql.createConnection({
+  host     : process.env.DB_HOST,
+  user     : process.env.DB_USER,
+  password : process.env.DB_PASSWORD,
+  database : 'todo_app'
+});
 
 const app = express();
 app.use(cors());
@@ -9,9 +17,14 @@ app.use(bodyParser.json());
 
 
 app.get("/tasks", function(req, response) {
-  response.send({ tasks: [{"text" : "water plants", "completed" : false, "date" : "2019-10-29", id : 1},
-  {"text" : "do dishes", "completed" : false, "date" : "2019-10-29", id : 2}, {"text" : "buy oats", "completed" : false, "date" : "2019-10-29", id : 3}, 
-  {"text" : "buy cat food", "completed" : false, "date" : "2019-10-07", "id" : 4}] });
+  connection.query("SELECT * FROM task", function (err, data){
+    if (err) {
+      response.status(500).json({error: err});
+    } else {
+      response.status(200).json(data);
+    }
+  });
+  
 });
 
 app.delete("/tasks/:taskID", function (request, response){
@@ -38,10 +51,11 @@ app.put("/tasks/:taskID", function(request, response){
   const taskID = request.params.taskID;
   const task = request.body;
   const updateMessage = {
-    "message" : "You issued a put request for ID: " + taskID
+    "message" : "You issued a put request for ID: " + taskID + task.text
   };
   // {"text" : "buy cat food", "completed" : true, "date" : "2019-10-07", "id" : 4}
-  response.status(200).json(updateMessage);
+  //response.status(205).json(updateMessage);
+  response.status(205).send(`You issued a PUT request for task ${taskID} with task ${JSON.stringify(task)}`);
 
 });
 
