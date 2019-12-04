@@ -51,13 +51,16 @@ app.delete("/tasks/:taskID", function (request, response) {
 app.post("/tasks", function (request, response) {
   //Create the new task in the database
   const task = request.body;
+  task.done = false;
   // {text: "hoover the car", completed: false, date: "2019-11-20"}
-  const query = "INSERT INTO task (task_name,due_by,done,date_added,date_completed,owner_id) VALUES(task_name = ?,due_by = ?,done = ?,date_added = ?,date_completed = ?,owner_id = ?);"
-  connection.query(query, [task.task_name, task.due_by, task.done, task.date_added, task.date_completed, task.owner_id], function (err, data) {
+  const query = "INSERT INTO task SET ?;"
+  // const query = "INSERT INTO task (task_name,due_by,done,date_added,date_completed,owner_id) VALUES(task_name = ?,due_by = ?,done = ?,date_added = ?,date_completed = ?,owner_id = ?);"
+  connection.query(query, task, function (err, data) {
     if (err) {
       response.status(500).json({ error: err });
     } else {
-      response.status(201).send(`${JSON.stringify(task)}`);
+      task.task_id = data.insertId
+      response.status(201).json(task);
     }
   });
 });
