@@ -52,20 +52,39 @@ app.post("/tasks", function (request, response){
   //Create the new task in the database
   const task = request.body; 
   // {text: "hoover the car", completed: false, date: "2019-11-20"}
-  response.status(201).send(`Successfully created ${task.text} with date ${task.date}`);
+  const q = "INSERT INTO task (task_name,due_by,done,date_added,date_completed,owner_id) VALUES(task_name = ?,due_by = ?,done = ?,date_added =?,date_completed = ?,owner_id = ?);"
+  connection.query(q, [task.task_name, task.due_by, task.done, task.date_added, task.date_completed, task.owner_id ], function (err, data) {
+    if (err) {
+      response.status(500).json({error: err})
+    } else {
+      response.status(201).json(data);
+    }  
+  });
 });
+//   response.status(201).send(`Successfully created ${task.task_name} with date ${task.date_added}`);
+// });
 
 app.put("/tasks/:taskID", function(request, response){
   //Update task in database
   const taskID = request.params.taskID;
   const task = request.body;
-  const updateMessage = {
-    "message" : "You issued a put request for ID: " + taskID + task.text
-  };
+  //{"task_name": "Homework Lizzie", "due_by": "2019-11-16T00:00:00.000Z", "done": 1, "date_added": "2019-10-16T00:00:00.000Z", "date_completed": "0000-00-00"}
+  const q = "UPDATE task SET task_name = ?, due_by = ?, done = ?, date_completed = ? WHERE task_id = ?"
+  connection.query(q, [task.task_name, task.due_by, task.done, task.date_completed, taskID], function (err, data) {
+    if (err) {
+      response.status(500).json({error: err})
+    } else {
+      response.sendStatus(205);
+    }
+  });
+});
+  // const updateMessage = {
+  //   "message" : "You issued a put request for ID: " + taskID + task.text
+  // };
   // {"text" : "buy cat food", "completed" : true, "date" : "2019-10-07", "id" : 4}
   //response.status(205).json(updateMessage);
-  response.status(205).send(`You issued a PUT request for task ${taskID} with task ${JSON.stringify(task)}`);
+//   response.status(205).send(`You issued a PUT request for task ${taskID} with task ${JSON.stringify(task)}`);
 
-});
+// });
 
 module.exports.handler = serverlessHttp(app);
