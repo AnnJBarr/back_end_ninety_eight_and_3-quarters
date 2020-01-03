@@ -28,9 +28,7 @@ app.get("/tasks", function (req, response) {
 });
 
 app.delete("/tasks/:taskID", function (request, response) {
-  // Delete task with given ID from the database
   const taskID = request.params.taskID;
-  //Escape user provided values
   connection.query("DELETE from task WHERE task_id = ?", [taskID], function (err, data) {
     if (err) {
       response.status(500).json({ error: err });
@@ -39,22 +37,11 @@ app.delete("/tasks/:taskID", function (request, response) {
     }
   });
 });
-// let deleteResponse = {message: "You issued a delete request for ID: " + taskToBeDeletedID}
-
-// if(taskToBeDeletedID > 4){
-//   response.status(404)
-//   deleteResponse = {message: "Task: " + taskToBeDeletedID + " does not exist"}
-// }
-// response.send(deleteResponse);
-// });
 
 app.post("/tasks", function (request, response) {
-  //Create the new task in the database
   const task = request.body;
   task.done = false;
-  // {text: "hoover the car", completed: false, date: "2019-11-20"}
   const query = "INSERT INTO task SET ?;"
-  // const query = "INSERT INTO task (task_name,due_by,done,date_added,date_completed,owner_id) VALUES(task_name = ?,due_by = ?,done = ?,date_added = ?,date_completed = ?,owner_id = ?);"
   connection.query(query, task, function (err, data) {
     if (err) {
       response.status(500).json({ error: err });
@@ -64,11 +51,8 @@ app.post("/tasks", function (request, response) {
     }
   });
 });
-//   response.status(201).send(`Successfully created ${task.task_name} with date ${task.date_added}`);
-// });
 
 app.put("/tasks/:taskID", function (request, response) {
-  //Update task in database
   const taskID = request.params.taskID;
   const task = request.body;
   //{"task_name": "Homework Lizzie", "due_by": "2019-11-16T00:00:00.000Z", "done": 1, "date_added": "2019-10-16T00:00:00.000Z", "date_completed": "0000-00-00"}
@@ -81,13 +65,5 @@ app.put("/tasks/:taskID", function (request, response) {
     }
   });
 });
-// const updateMessage = {
-//   "message" : "You issued a put request for ID: " + taskID + task.text
-// };
-// {"text" : "buy cat food", "completed" : true, "date" : "2019-10-07", "id" : 4}
-//response.status(205).json(updateMessage);
-//   response.status(205).send(`You issued a PUT request for task ${taskID} with task ${JSON.stringify(task)}`);
-
-// });
 
 module.exports.handler = serverlessHttp(app);
