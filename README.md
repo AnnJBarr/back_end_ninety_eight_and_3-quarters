@@ -25,7 +25,7 @@ The API exposes the following endpoints:
 
 ##### GET /tasks
 
-[https://xo0mntjodk.execute-api.eu-west-2.amazonaws.com/dev/tasks](https://xo0mntjodk.execute-api.eu-west-2.amazonaws.com/dev/tasks)
+******************.amazonaws.com/dev/tasks
 
 Responds with JSON containing all tasks in the Database.
 
@@ -33,7 +33,7 @@ Responds with JSON containing all tasks in the Database.
 
 ##### POST /tasks
 
-[https://xo0mntjodk.execute-api.eu-west-2.amazonaws.com/dev/tasks](https://xo0mntjodk.execute-api.eu-west-2.amazonaws.com/dev/tasks)
+******************.amazonaws.com/dev/tasks
 
 Will create a new task when sent a JSON payload in the format:
 
@@ -52,7 +52,7 @@ Will create a new task when sent a JSON payload in the format:
 
 ##### DELETE /tasks/:taskId
 
-[https://xo0mntjodk.execute-api.eu-west-2.amazonaws.com/dev/tasks/:taskId](https://xo0mntjodk.execute-api.eu-west-2.amazonaws.com/dev/tasks/:taskId)
+******************.amazonaws.com/dev/tasks/:taskId
 
 Deletes the task of the given ID.
 
@@ -60,7 +60,7 @@ Deletes the task of the given ID.
 
 ##### PUT /tasks/:taskId
 
-[https://xo0mntjodk.execute-api.eu-west-2.amazonaws.com/dev/tasks/:taskId](https://xo0mntjodk.execute-api.eu-west-2.amazonaws.com/dev/tasks/:taskId)
+******************.amazonaws.com/dev/tasks/:taskId
 
 Will update a task when sent a JSON payload in the format:
 
